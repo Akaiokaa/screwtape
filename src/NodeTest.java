@@ -89,5 +89,35 @@ class NodeTest {
   }
 
   // TODO: Add test for Node with no next or prev
+  @Test
+  void testToListWithNoNextOrPrev() {
+    // Arrange
+    Node head = new Node(4);
+
+    // Act
+    List<Integer> values = head.toList();
+
+    // Assert
+    assertEquals(List.of(4), values);
+    assertEquals(null, head.next);
+    assertEquals(null, head.prev);
+
+  }
   // TODO: Add at least one more test for list constructor that would be useful and cover new ground.
+
+  @Test
+  void testToListWithOnlyHeadAndMiddleNegativeValues() {
+    // Arrange
+    Node head = new Node(-4);
+    Node middle = new Node(-7);
+
+    head.next = middle;
+    middle.prev = head;
+    // Act
+    List<Integer> values = head.toList();
+
+    // Assert
+    assertEquals(List.of(-4, -7), values);
+
+  }
 }
