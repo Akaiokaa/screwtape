@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * A Screwtape interpreter that executes programs written in the Screwtape esoteric programming language.
@@ -106,8 +109,42 @@ public class ScrewtapeInterpreter {
    */
   public Map<Integer, Integer> bracketMap(String program) {
     // TODO: Implement this
+    // closed]key value[ opening
     // Hint: use a stack
-    return null;
+    // loop through the string using char
+    Map<Integer, Integer> map = new HashMap<>();
+    Stack<Character> stack = new Stack<>();
+    List<Integer> indexArray = new ArrayList<>();
+
+    Character currentChar;
+    for(int i = 0; i < program.length(); i++){
+      
+      if (program.charAt(i) == '[' || program.charAt(i) == ']') {
+        currentChar = program.charAt(i);
+
+        if (currentChar == '[') {
+          indexArray.add(i);
+          stack.add(currentChar);
+        } else {
+          if (stack.isEmpty()) {throw new IllegalArgumentException();}
+
+          Character lastOpening = stack.pop();
+
+          if (lastOpening == '[' && currentChar == ']'){
+            indexArray.add(i);
+            continue;
+          } else {
+            throw new IllegalArgumentException();
+          } 
+        }
+      }
+    }
+    for (int j = 0; j < indexArray.size() / 2; j++) {
+      map.put(indexArray.get(indexArray.size() - 1 - j), indexArray.get(j));
+    }
+    // store indext if matching other wise throw new error
+    //loop through map add first value as the key closing second as opening
+    return map;
   }
 
   /**
