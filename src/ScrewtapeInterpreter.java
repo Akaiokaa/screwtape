@@ -114,16 +114,17 @@ public class ScrewtapeInterpreter {
     // loop through the string using char
     Map<Integer, Integer> map = new HashMap<>();
     Stack<Character> stack = new Stack<>();
-    List<Integer> indexArray = new ArrayList<>();
+    Stack<Integer> indexStack = new Stack<>();
 
     Character currentChar;
     for(int i = 0; i < program.length(); i++){
-      
+      //[[]]
       if (program.charAt(i) == '[' || program.charAt(i) == ']') {
         currentChar = program.charAt(i);
 
         if (currentChar == '[') {
-          indexArray.add(i);
+          // indexArray.add(i);
+          indexStack.add(i);
           stack.add(currentChar);
         } else {
           if (stack.isEmpty()) {throw new IllegalArgumentException();}
@@ -131,7 +132,7 @@ public class ScrewtapeInterpreter {
           Character lastOpening = stack.pop();
 
           if (lastOpening == '[' && currentChar == ']'){
-            indexArray.add(i);
+            map.put(i, indexStack.pop());
             continue;
           } else {
             throw new IllegalArgumentException();
@@ -139,9 +140,13 @@ public class ScrewtapeInterpreter {
         }
       }
     }
-    for (int j = 0; j < indexArray.size() / 2; j++) {
-      map.put(indexArray.get(indexArray.size() - 1 - j), indexArray.get(j));
+    if(!indexStack.isEmpty()){
+      throw new IllegalArgumentException();
     }
+   
+    // for (int j = 0; j < indexArray.size() / 2; j++) {
+    //   map.put(indexArray.get(indexArray.size() - 1 - j), indexArray.get(j));
+    // }
     // store indext if matching other wise throw new error
     //loop through map add first value as the key closing second as opening
     return map;
