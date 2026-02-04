@@ -177,12 +177,21 @@ public class ScrewtapeInterpreter {
     String outPutString = "";
     int counter = 0;
     while(instructionPointer < program.length()){
+      // testAdd()
+      if (program.charAt(instructionPointer) == '+') { counter++; tapePointer.value = counter; }
 
-      //testAdd()
-      if (program.charAt(instructionPointer) == '+') { counter++; tapeHead.value = counter; }
+      // testSubtract()
+      if (program.charAt(instructionPointer) == '-') { counter--; tapePointer.value = counter; }
 
-      //testSubtract()
-      if (program.charAt(instructionPointer) == '-') { counter--; tapeHead.value = counter; }
+      // testRightAndAdd()
+      if (program.charAt(instructionPointer) == '>') {
+        Node nodeNext = new Node(0);
+
+        tapePointer.next = nodeNext;
+        nodeNext.prev = tapePointer;
+
+        tapePointer = nodeNext;
+      }
 
       instructionPointer++;
     }
