@@ -193,6 +193,17 @@ public class ScrewtapeInterpreter {
         tapePointer = nodeNext;
       }
 
+      // testLeftAndAdd()
+      if (program.charAt(instructionPointer) == '<') {
+        Node nodePrev = new Node(0);
+
+        tapeHead.prev = nodePrev;
+        nodePrev.next = tapeHead;
+
+        tapeHead = nodePrev;
+        tapePointer = nodePrev;
+      }
+
       instructionPointer++;
     }
     return outPutString;
