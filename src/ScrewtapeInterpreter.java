@@ -173,6 +173,16 @@ public class ScrewtapeInterpreter {
   public String execute(String program) {
     // TODO: Implement this
     // If you get stuck, you can look at hint.md for a hint
-    return null;
+    int instructionPointer = 0;
+    String outPutString = "";
+    int plusCounter = 0;
+    while(instructionPointer < program.length()){
+      if (program.charAt(instructionPointer) == '+') {
+        plusCounter++;
+        tapeHead.value = plusCounter;
+      }
+      instructionPointer++;
+    }
+    return outPutString;
   }
 }
