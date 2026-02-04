@@ -175,12 +175,15 @@ public class ScrewtapeInterpreter {
     // If you get stuck, you can look at hint.md for a hint
     int instructionPointer = 0;
     String outPutString = "";
-    int plusCounter = 0;
+    int counter = 0;
     while(instructionPointer < program.length()){
-      if (program.charAt(instructionPointer) == '+') {
-        plusCounter++;
-        tapeHead.value = plusCounter;
-      }
+
+      //testAdd()
+      if (program.charAt(instructionPointer) == '+') { counter++; tapeHead.value = counter; }
+
+      //testSubtract()
+      if (program.charAt(instructionPointer) == '-') { counter--; tapeHead.value = counter; }
+
       instructionPointer++;
     }
     return outPutString;
