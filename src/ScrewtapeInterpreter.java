@@ -203,6 +203,11 @@ public class ScrewtapeInterpreter {
         tapeHead = nodePrev;
         tapePointer = nodePrev;
       }
+      // void testOutput()
+      if(program.charAt(instructionPointer) == '.'){
+        char character = (char) counter;
+        outPutString += String.valueOf(character);
+      }
 
       instructionPointer++;
     }
