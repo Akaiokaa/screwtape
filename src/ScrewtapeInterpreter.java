@@ -113,7 +113,7 @@ public class ScrewtapeInterpreter {
     // Hint: use a stack
     // loop through the string using char
     Map<Integer, Integer> map = new HashMap<>();
-    Stack<Character> stack = new Stack<>();
+    // Stack<Character> stack = new Stack<>();
     Stack<Integer> indexStack = new Stack<>();
 
     Character currentChar;
@@ -125,18 +125,12 @@ public class ScrewtapeInterpreter {
         if (currentChar == '[') {
           // indexArray.add(i);
           indexStack.add(i);
-          stack.add(currentChar);
-        } else {
-          if (stack.isEmpty()) {throw new IllegalArgumentException();}
+        } else if (currentChar == ']' && indexStack.isEmpty()){
+          throw new IllegalArgumentException();
+        } else if(currentChar == ']'){
+          int lastOpening = indexStack.pop();
 
-          Character lastOpening = stack.pop();
-
-          if (lastOpening == '[' && currentChar == ']'){
-            map.put(i, indexStack.pop());
-            continue;
-          } else {
-            throw new IllegalArgumentException();
-          } 
+          map.put(i, lastOpening);
         }
       }
     }
@@ -173,44 +167,52 @@ public class ScrewtapeInterpreter {
   public String execute(String program) {
     // TODO: Implement this
     // If you get stuck, you can look at hint.md for a hint
+    Map<Integer, Integer> bracketMap = bracketMap(program);
+    
     int instructionPointer = 0;
     String outPutString = "";
-    int counter = 0;
+    
     while(instructionPointer < program.length()){
       // testAdd()
-      if (program.charAt(instructionPointer) == '+') { counter++; tapePointer.value = counter; }
+      if (program.charAt(instructionPointer) == '+') { tapePointer.value++; }
 
       // testSubtract()
-      if (program.charAt(instructionPointer) == '-') { counter--; tapePointer.value = counter; }
+      else if  (program.charAt(instructionPointer) == '-') { tapePointer.value--; }
 
       // testRightAndAdd()
-      if (program.charAt(instructionPointer) == '>') {
-        Node nodeNext = new Node(0);
+      else if (program.charAt(instructionPointer) == '>') {
+        if (tapePointer.next == null) {
+          tapePointer.next = new Node(0);
+          tapePointer.next.prev = tapePointer;
 
-        tapePointer.next = nodeNext;
-        nodeNext.prev = tapePointer;
-
-        tapePointer = nodeNext;
+        }
+        tapePointer = tapePointer.next;
       }
 
       // testLeftAndAdd()
-      if (program.charAt(instructionPointer) == '<') {
-        Node nodePrev = new Node(0);
-
-        tapeHead.prev = nodePrev;
-        nodePrev.next = tapeHead;
-
-        tapeHead = nodePrev;
-        tapePointer = nodePrev;
+      else if (program.charAt(instructionPointer) == '<') {
+        if (tapePointer.prev == null) {
+          tapePointer.prev = new Node(0);
+          tapePointer.prev.next = tapeHead;
+          tapeHead = tapePointer.prev;
+        }
+        tapePointer = tapePointer.prev;
+        
       }
       // void testOutput()
-      if(program.charAt(instructionPointer) == '.'){
-        char character = (char) counter;
+      else if (program.charAt(instructionPointer) == '.'){
+        char character = (char) tapePointer.value;
         outPutString += String.valueOf(character);
       }
+      //+++[>++<-]>  9 3
 
+      else if (program.charAt(instructionPointer) == ']'){
+        if(tapePointer.value != 0){
+          instructionPointer = bracketMap.get(instructionPointer);
+        }
+      }
       instructionPointer++;
     }
-    return outPutString;
+    return outPutString.toString();
   }
 }
